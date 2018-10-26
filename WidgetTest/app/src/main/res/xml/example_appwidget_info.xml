@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.android.htec.widgettest.ExampleAppWidgetConfigActivity"
     android:initialLayout="@layout/example_widget"
     android:minHeight="40dp"
-    android:minWidth="110dp"
     android:minResizeWidth="40dp"
+    android:minWidth="110dp"
+    android:previewImage="@drawable/widget_test"
     android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="3600000"
-    android:previewImage="@drawable/widget_test"
     android:widgetCategory="home_screen">
 
 </appwidget-provider>
