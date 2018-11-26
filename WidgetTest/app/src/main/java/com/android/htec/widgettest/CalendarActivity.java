@@ -3,9 +3,12 @@ package com.android.htec.widgettest;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +31,11 @@ public class CalendarActivity extends AppCompatActivity {
     private LinearLayout[] weeks;
     private Calendar currentCalendar;
 
+    private ConstraintLayout constraintLayout;
+    private ConstraintSet constraintSetOld = new ConstraintSet();
+    private ConstraintSet constraintSetNew = new ConstraintSet();
+    private boolean altLayout;
+
     private enum MondayFirstDays {
         MONDAY,
         TUESDAY,
@@ -46,6 +54,11 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        constraintLayout = findViewById(R.id.constraint_layout_content);
+        constraintSetOld.clone(constraintLayout);
+        constraintSetNew.clone(this, R.layout.content_calendar_activity_alt);
+
         setCalendarDays();
     }
 
@@ -62,6 +75,24 @@ public class CalendarActivity extends AppCompatActivity {
         TextView textCurrentMonth = findViewById(R.id.text_selected_month);
         DateFormatSymbols dfs = new DateFormatSymbols();
         textCurrentMonth.setText(dfs.getMonths()[currentCalendar.get(Calendar.MONTH)]);
+
+        textCurrentMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swapViews();
+            }
+        });
+    }
+
+    private void swapViews() {
+        TransitionManager.beginDelayedTransition(constraintLayout);
+        if (!altLayout) {
+            constraintSetNew.applyTo(constraintLayout);
+            altLayout = true;
+        } else {
+            constraintSetOld.applyTo(constraintLayout);
+            altLayout = false;
+        }
     }
 
     private void initButtons() {
@@ -98,7 +129,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void onDateClick(DateTime dateTime) {
         if (dateTime == null) return;
-        Toast.makeText(this, dateTime.toString(), Toast.LENGTH_SHORT).show();
 
         setBottomSheetData(dateTime);
     }
@@ -141,7 +171,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void initDayArray() {
         days = new Button[6 * 7];
 
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         buttonParams.weight = 1;
 
         for (int week = 0; week < 6; week++) {

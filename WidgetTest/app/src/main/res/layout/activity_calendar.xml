@@ -6,6 +6,6 @@
 
     <include layout="@layout/content_calendar_activity"/>
 
-    <include layout="@layout/calendar_bottom_sheet"/>
+    <!--<include layout="@layout/calendar_bottom_sheet"/>-->
 
 </android.support.design.widget.CoordinatorLayout>
