@@ -55,6 +55,7 @@ public class CalendarActivity extends AppCompatActivity {
         initDayArray();
         initButtons();
         setDates();
+        setBottomSheetData(new DateTime(currentCalendar.getTime()));
     }
 
     private void setCurrentMonthData() {
