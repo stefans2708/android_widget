@@ -48,12 +48,27 @@ public class WeekCalendarActivity extends AppCompatActivity {
         buttonParams.weight = 1;
 
         int[] digitsForWeek = monthDisplayHelper.getDigitsForRow(week);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = ((Button) v);
+                DateTime dateTag = ((DateTime) button.getTag());
+                if (dateTag.getMonthOfYear() < monthDisplayHelper.getMonth()) {
+                    monthDisplayHelper.previousMonth();
+                } else if (dateTag.getMonthOfYear() > monthDisplayHelper.getMonth()) {
+                    monthDisplayHelper.nextMonth();
+                }
+                setMonthName();
+            }
+        };
         for (int day = 0; day < 7; day++) {
             Button btnDay = new Button(this);
             btnDay.setLayoutParams(buttonParams);
             btnDay.setSingleLine();
             btnDay.setTextColor(Color.BLUE);
             btnDay.setText(String.valueOf(digitsForWeek[day]));
+            btnDay.setTag(new DateTime(monthDisplayHelper.getYear(), monthDisplayHelper.getMonth(), digitsForWeek[day], 0 ,0));
+            btnDay.setOnClickListener(onClickListener);
 
             linearCalendarWeek.addView(btnDay);
         }
