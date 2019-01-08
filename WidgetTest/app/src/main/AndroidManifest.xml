@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CalendarActivity" >
+        </activity>
+        <activity android:name=".WeekCalendarActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

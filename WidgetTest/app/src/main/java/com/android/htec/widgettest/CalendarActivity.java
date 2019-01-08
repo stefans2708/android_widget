@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -84,8 +86,9 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    private void swapViews() {
+    private void swapViews(/*boolean showDetails*/) {
         TransitionManager.beginDelayedTransition(constraintLayout);
+
         if (!altLayout) {
             constraintSetNew.applyTo(constraintLayout);
             altLayout = true;
@@ -93,6 +96,13 @@ public class CalendarActivity extends AppCompatActivity {
             constraintSetOld.applyTo(constraintLayout);
             altLayout = false;
         }
+//        if (!showDetails) {
+//            constraintSetNew.applyTo(constraintLayout);
+//            altLayout = true;
+//        } else {
+//            constraintSetOld.applyTo(constraintLayout);
+//            altLayout = false;
+//        }
     }
 
     private void initButtons() {
@@ -142,11 +152,11 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<DateTime> list = new ArrayList<>();
-        list.add(new DateTime(2018,10,22,0,0));
-        list.add(new DateTime(2018,11,12,0,0));
-        list.add(new DateTime(2018,12,20,0,0));
-        list.add(new DateTime(2018,12,20,0,0));
-        list.add(new DateTime(2018,12,20,0,0));
+        list.add(new DateTime(2018, 10, 22, 0, 0));
+        list.add(new DateTime(2018, 11, 12, 0, 0));
+        list.add(new DateTime(2018, 12, 20, 0, 0));
+        list.add(new DateTime(2018, 12, 20, 0, 0));
+        list.add(new DateTime(2018, 12, 20, 0, 0));
         recyclerView.setAdapter(new DateItemsAdapter(list));
     }
 
@@ -227,6 +237,5 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
     }
-
 
 }
