@@ -23,8 +23,6 @@ public class WeekCalendarActivity extends AppCompatActivity {
     private TextView txtMonthName;
     private MonthDisplayHelper monthDisplayHelper;
     private int week;
-    private int month;
-    private int year;
     private DateTime today;
 
     @Override
@@ -33,9 +31,7 @@ public class WeekCalendarActivity extends AppCompatActivity {
         setContentView(R.layout.week_calendar_activity);
         initViews();
         today = DateTime.now();
-        month = today.getMonthOfYear();
-        year = today.getYear();
-        monthDisplayHelper = new MonthDisplayHelper(year, month, Calendar.MONDAY);
+        monthDisplayHelper = new MonthDisplayHelper(today.getYear(), today.getMonthOfYear(), Calendar.MONDAY);
         week = monthDisplayHelper.getRowOf(today.getDayOfMonth());
         initDayArray();
         setClickListeners();
@@ -48,8 +44,6 @@ public class WeekCalendarActivity extends AppCompatActivity {
     }
 
     private void initDayArray() {
-        monthDisplayHelper = new MonthDisplayHelper(year, month, Calendar.MONDAY);  //todo - use nextmonth and prevmonth methods
-
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
         buttonParams.weight = 1;
 
@@ -73,10 +67,10 @@ public class WeekCalendarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 linearCalendarWeek.removeAllViews();
-                getNextWeek2();
+                getNextWeek();
                 initDayArray();
                 setMonthName();
-                Toast.makeText(WeekCalendarActivity.this, "month: " + month + "\nweek: " + week, Toast.LENGTH_SHORT).show();
+                Toast.makeText(WeekCalendarActivity.this, "month: " + monthDisplayHelper.getMonth() + "\nweek: " + week, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,55 +81,36 @@ public class WeekCalendarActivity extends AppCompatActivity {
                 getPrevWeek();
                 initDayArray();
                 setMonthName();
-                Toast.makeText(WeekCalendarActivity.this, "month: " + month + "\nweek: " + week, Toast.LENGTH_SHORT).show();
+                Toast.makeText(WeekCalendarActivity.this, "month: " + monthDisplayHelper.getMonth() + "\nweek: " + week, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void setMonthName() {
         DateFormatSymbols dfs = new DateFormatSymbols();
-        txtMonthName.setText(dfs.getMonths()[month]);
-    }
-
-    private void getNextWeek() {
-        if (week == 5) {
-            week = 0;
-            month++;
-        } else {
-            week += 1;
-        }
-
-        int[] digitsForRow = monthDisplayHelper.getDigitsForRow(week);
-        int first = digitsForRow[0];
-        if (week == 5 && first < 20) {
-            if (first == 1) {
-                week = 0;
-            } else {
-                week = 1;
-            }
-            month++;
-        }
+        txtMonthName.setText(dfs.getMonths()[monthDisplayHelper.getMonth()]);
     }
 
     private void getPrevWeek() {
         if (week == 0) {
             week = 5;
-            month--;
+            monthDisplayHelper.previousMonth();
+            int lastDate = monthDisplayHelper.getDigitsForRow(week)[6];
+            while (lastDate < 15) {
+                week--;
+                lastDate = monthDisplayHelper.getDigitsForRow(week)[6];
+            }
         } else {
             week -= 1;
         }
 
-        int[] digitsForRow = monthDisplayHelper.getDigitsForRow(week);
-        if (week == 5 && digitsForRow[0] < 20) {
-            week--;
-        }
     }
 
 
-    private void getNextWeek2() {
+    private void getNextWeek() {
         if (week == 5) {
             week = 0;
-            month++;
+            monthDisplayHelper.nextMonth();
         } else {
             week += 1;
         }
@@ -144,10 +119,12 @@ public class WeekCalendarActivity extends AppCompatActivity {
 
         if (firstDate == 1) {
             week = 0;
-            month++;
-        } else if ((week == 5 || week == 0) && firstDate <= 8) {
+            monthDisplayHelper.nextMonth();
+        } else if (week == 5 && firstDate <= 8) {
             week = 1;
-            month++;
+            monthDisplayHelper.nextMonth();
+        } else if (week == 0 && firstDate >= 26) {
+            week = 1;
         }
 
     }
