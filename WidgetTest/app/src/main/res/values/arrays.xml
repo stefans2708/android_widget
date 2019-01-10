@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="months">
+        <item>@string/MONTH_JANUARY</item>
+        <item>@string/MONTH_FEBRUARY</item>
+        <item>@string/MONTH_MARCH</item>
+        <item>@string/MONTH_APRIL</item>
+        <item>@string/MONTH_MAY</item>
+        <item>@string/MONTH_JUNE</item>
+        <item>@string/MONTH_JULY</item>
+        <item>@string/MONTH_AUGUST</item>
+        <item>@string/MONTH_SEPTEMBER</item>
+        <item>@string/MONTH_OCTOBER</item>
+        <item>@string/MONTH_NOVEMBER</item>
+        <item>@string/MONTH_DECEMBER</item>
+    </string-array>
+
+</resources>
